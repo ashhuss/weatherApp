@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 
 interface WeatherApiInterface {
-    @GET("weather?lat=33.7748&lon=84.2963")
+    @GET("weather")
     fun getWeatherDataAsync(
         @Query("appid") appId: String,
         @Query("lat") lat: String,

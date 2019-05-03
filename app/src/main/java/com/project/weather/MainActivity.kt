@@ -14,18 +14,20 @@ import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.weather_forecast.*
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), LocationListener {
-    internal lateinit var locationManager: LocationManager
+    private lateinit var locationManager: LocationManager
     private val REQUEST_LOCATION = 101
     private var lat: String? = null
     private var lng: String? = null
@@ -34,14 +36,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
     val MY_DATA = "my_data"
     val lati = "lat"
     val lon = "lon"
-    val unit = "unit"
-
 
     var connectionDetector: ConnectionDetector? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.weather_forecast)
         setSupportActionBar(toolbar)
 
         connectionDetector = ConnectionDetector(this)
@@ -80,7 +80,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
         Log.d("latlngSpCheck", latDataCheck + "" + lonDataCheck)
         val service = RetrofitFactory.makeRetrofitService()
         CoroutineScope(Dispatchers.IO).launch {
-            val request = service.getWeatherDataAsync(AppConstants.apiKey, latDataCheck, lonDataCheck,"imperial")
+            val request =
+                service.getWeatherDataAsync(AppConstants.apiKey, latDataCheck, lonDataCheck, AppConstants.unit)
             withContext(Dispatchers.Main) {
                 try {
                     val response = request.await()
@@ -89,12 +90,54 @@ class MainActivity : AppCompatActivity(), LocationListener {
                         val weatherList: WeatherModelList? = response.body()
                         val weatherDataModel = weatherList?.getWeatherList()
                         val weatherDataModelMain = weatherList?.mainData
+                        val weatherDataModelWind = weatherList?.wind
+                        val weatherDataModelSys = weatherList?.sys
+                        val weatherDataModelCloud = weatherList?.cloudData
 
                         //weather
-                        current_weather.text = weatherDataModel?.get(0)?.main
+                        when {
+                            weatherDataModel?.get(0)?.main.equals("Clear") -> {
+                                iv_weather.visibility = View.VISIBLE
+                                iv_weather.setBackgroundResource(R.drawable.ic_warm)
+                            }
+                            weatherDataModel?.get(0)?.main.equals("Rain") -> {
+                                iv_weather.visibility = View.VISIBLE
+                                iv_weather.setBackgroundResource(R.drawable.ic_rain)
+                            }
+                            weatherDataModel?.get(0)?.main.equals("Cloud") -> {
+                                iv_weather.visibility = View.VISIBLE
+                                iv_weather.setBackgroundResource(R.drawable.ic_partly_cloudy_blue)
+                            }
 
-                        // main
-                        current_humitdity.text = weatherDataModelMain?.humidity.toString()
+                            // Weather forecast
+
+                            // clouds
+                            // wind
+                        }
+                        tv_current_status.text = weatherDataModel?.get(0)?.main
+
+                        // Weather forecast
+                        tv_city.text = weatherDataModelSys?.country
+                        val resultTemMax = Math.ceil(weatherDataModelMain?.tempMax!!).toInt()
+                        val resultTemMin = Math.ceil(weatherDataModelMain.tempMin).toInt()
+                        val resultTemp = Math.ceil(weatherDataModelMain.temp).toInt()
+                        val resultPressure = Math.ceil(weatherDataModelMain.pressure).toInt()
+                        val resultWind = Math.ceil(weatherDataModelWind!!.speed).toInt()
+                        val resultWindDeg = Math.ceil(weatherDataModelWind.deg).toInt()
+
+                        tv_degree.text = weatherDataModelMain.humidity.toString()
+                        tv_humidity.text = weatherDataModelMain.humidity.toString()
+                        tv_temperature.text = resultTemp.toString()
+                        tv_pressure.text = resultPressure.toString()
+                        tv_max_temperature.text = resultTemMax.toString()
+                        tv_min_temperature.text = resultTemMin.toString()
+
+                        // clouds
+                        tv_clouds_all.text = weatherDataModelCloud?.all.toString()
+                        // wind
+                        tv_wind_speed.text = resultWind.toString()
+
+                        tv_wind_deg.text = resultWindDeg.toString()
 
                     } else {
                         toast("Error: ${response.code()}")
@@ -123,7 +166,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
-    fun Context.toast(message: CharSequence) =
+    private fun Context.toast(message: CharSequence) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     override fun onLocationChanged(location: Location?) {
@@ -223,7 +266,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
     }
 
-    internal fun save(latValue: String, lonValue: String) {
+    private fun save(latValue: String, lonValue: String) {
         sharedPreferences = getSharedPreferences(
             MY_DATA,
             Context.MODE_PRIVATE
@@ -231,7 +274,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val editor = sharedPreferences.edit()
         editor.putString(lati, latValue)
         editor.putString(lon, lonValue)
-        editor.commit()
+        editor.apply()
 
     }
 }

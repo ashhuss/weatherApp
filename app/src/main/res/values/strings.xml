@@ -5,4 +5,21 @@
     <string name="retry">Retry</string>
     <string name="close_all_caps">Close</string>
     <string name="internet_msg">Please connect to internet.</string>
+    <string name="degree"><![CDATA[&#xb0;]]></string>
+    <string name="refresh">Refresh</string>
+    <string name="c">C</string>
+    <string name="wind">Wind</string>
+    <string name="wind_speed">Wind Speed :</string>
+    <string name="ground_level">Ground Level :</string>
+    <string name="seal_level">Seal Level :</string>
+    <string name="max_temperature">Max Temperature :</string>
+    <string name="min_temperature">Min Temperature :</string>
+    <string name="pressure">Pressure :</string>
+    <string name="humidity">Humidity : </string>
+    <string name="wind_deg">Wind DEG :</string>
+    <string name="clouds">Clouds</string>
+    <string name="clouds_percentage">Clouds percentage :</string>
+    <string name="xb0">°</string>
+    <string name="forecast">Forecast</string>
+    <string name="temperature">Temperature :</string>
 </resources>

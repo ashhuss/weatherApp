@@ -8,11 +8,15 @@ data class WeatherModelList(
     val weatherDataList: List<WeatherDataModel> = emptyList(),
 
     @SerializedName("main")
-    val mainData: WeatherDataModel
-) {
-    fun getWeatherList(): List<WeatherDataModel> {
-        return weatherDataList
-    }
+    val mainData: WeatherDataModel,
 
-}
+    @SerializedName("clouds")
+    val cloudData: WeatherDataModel,
+
+    @SerializedName("wind")
+    val wind: WeatherDataModel,
+
+    @SerializedName("sys")
+    val sys: WeatherDataModel
+) { fun getWeatherList(): List<WeatherDataModel> { return weatherDataList } }
 
