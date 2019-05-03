@@ -132,7 +132,6 @@
                         android:textColor="@color/colorAccent"
                         android:textSize="14sp"/>
 
-
                 <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
@@ -155,7 +154,6 @@
                             android:textSize="14sp"/>
 
                 </LinearLayout>
-
 
 
                 <LinearLayout
@@ -226,7 +224,6 @@
                 </LinearLayout>
 
 
-
                 <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
@@ -248,7 +245,6 @@
                             android:textColor="@color/colorWhite"
                             android:textSize="14sp"/>
                 </LinearLayout>
-
 
 
                 <View android:layout_width="match_parent"

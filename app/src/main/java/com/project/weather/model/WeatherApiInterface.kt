@@ -1,4 +1,4 @@
-package com.project.weather
+package com.project.weather.model
 
 import kotlinx.coroutines.Deferred
 import retrofit2.Response

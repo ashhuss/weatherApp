@@ -22,4 +22,5 @@
     <string name="xb0">°</string>
     <string name="forecast">Forecast</string>
     <string name="temperature">Temperature :</string>
+    <string name="rain">Rain :</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.project.weather
+package com.project.weather.model
 
 import com.google.gson.annotations.SerializedName
 
@@ -15,6 +15,9 @@ data class WeatherModelList(
 
     @SerializedName("wind")
     val wind: WeatherDataModel,
+
+    @SerializedName("rain")
+    val rain: WeatherDataModel,
 
     @SerializedName("sys")
     val sys: WeatherDataModel
